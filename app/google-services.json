@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "295044818109",
+    "project_id": "meet-us-18cd9",
+    "storage_bucket": "meet-us-18cd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295044818109:android:78d9dc0af85232422603d4",
+        "android_client_info": {
+          "package_name": "com.example.meetus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295044818109-ulbd3cso7efbea4f6ueegqj1qd85n141.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.meetus",
+            "certificate_hash": "2ee8c760fa3897e2b5dbbadaf4d60d8331fb9d6a"
+          }
+        },
+        {
+          "client_id": "295044818109-donudssc1cnku9s043jatbg5kqf72v8b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLbHSQsS0CRn-AbvHCpXzxkO2wnAebPNo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295044818109-donudssc1cnku9s043jatbg5kqf72v8b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
