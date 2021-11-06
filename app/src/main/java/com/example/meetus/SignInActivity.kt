@@ -3,6 +3,8 @@ package com.example.meetus
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import com.example.meetus.databinding.ActivityMainBinding
 import com.example.meetus.databinding.ActivitySignInBinding
@@ -19,6 +21,8 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         binding.btSignIn.setOnClickListener {
             val email=binding.etEmailSignIn.text.toString().trim()
@@ -37,6 +41,11 @@ class SignInActivity : AppCompatActivity() {
 
             signIn(email,password)
         }
+
+        binding.btnCreateAccount.setOnClickListener {
+            val intentSignUpActivity=Intent(this,SignUpActivity::class.java)
+            startActivity(intentSignUpActivity)
+        }
     }
 
     private fun signIn(email: String, password: String) {
@@ -44,6 +53,7 @@ class SignInActivity : AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
             if (it.isSuccessful){
                 val intentMainActivity=Intent(this,MainActivity::class.java)
+                intentMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intentMainActivity)
                 Toast.makeText(this, "Successfully Sign In", Toast.LENGTH_SHORT).show()
             }else{
@@ -52,4 +62,9 @@ class SignInActivity : AppCompatActivity() {
         }
 
     }
+
+
+
+
+
 }

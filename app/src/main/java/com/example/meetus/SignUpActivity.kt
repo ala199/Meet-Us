@@ -67,6 +67,10 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             createNewAccount(name, email, password) {}
 
         }
+        binding.tvBackToSignIn.setOnClickListener{
+            val intentSignInActivity=Intent(this,SignInActivity::class.java)
+            startActivity(intentSignInActivity)
+        }
     }
 
     private fun createNewAccount(name: String, email: String, password: String, function: () -> Unit)

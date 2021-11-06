@@ -74,5 +74,16 @@
         app:layout_constraintStart_toStartOf="@+id/et_password_sign_up"
         app:layout_constraintTop_toBottomOf="@+id/et_password_sign_up" />
 
+    <TextView
+        android:id="@+id/tv_back_to_signIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="already have account? Sign In NOW"
+        app:layout_constraintEnd_toEndOf="@+id/bt_signup"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toStartOf="@+id/bt_signup"
+        app:layout_constraintTop_toBottomOf="@+id/bt_signup" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
