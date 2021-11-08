@@ -24,14 +24,13 @@
         android:id="@+id/et_name_sign_up"
         android:layout_width="308dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="Enter Name"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.437"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/progress_Sign_Up"
+        app:layout_constraintStart_toStartOf="@+id/progress_Sign_Up"
+        app:layout_constraintTop_toBottomOf="@+id/progress_Sign_Up" />
 
     <EditText
         android:id="@+id/et_email_sign_up"
@@ -84,6 +83,18 @@
         app:layout_constraintHorizontal_bias="0.524"
         app:layout_constraintStart_toStartOf="@+id/bt_signup"
         app:layout_constraintTop_toBottomOf="@+id/bt_signup" />
+
+    <ProgressBar
+        android:id="@+id/progress_Sign_Up"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.601"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

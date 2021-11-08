@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -74,13 +75,15 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun createNewAccount(name: String, email: String, password: String, function: () -> Unit)
-    {
+    {                binding.progressSignUp.visibility= View.VISIBLE
+
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
 
             val newUser=User(name,"")
             currentUserDocRef.set(newUser)
 
             if (it.isSuccessful) {
+                binding.progressSignUp.visibility=View.INVISIBLE
                 val intentMianActivity = Intent(this, MainActivity::class.java)
                 intentMianActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intentMianActivity)
@@ -88,6 +91,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
             }
             else {
+                binding.progressSignUp.visibility=View.INVISIBLE
                 Toast.makeText(this, it.exception?.message, Toast.LENGTH_SHORT).show()
             }
         }
