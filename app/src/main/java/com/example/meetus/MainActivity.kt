@@ -4,7 +4,6 @@ package com.example.meetus
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.meetus.Fragment.ChatFragment
 import com.example.meetus.Fragment.MoreFragment

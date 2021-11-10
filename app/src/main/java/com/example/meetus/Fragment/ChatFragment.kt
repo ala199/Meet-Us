@@ -21,7 +21,7 @@ class ChatFragment : Fragment() {
         val textViewTitle=activity?.findViewById<TextView>(R.id.title_toolbar_textView)
         textViewTitle?.text="Chats"
 
-        val circle_image=activity?.findViewById<ImageView>(R.id.circle_image_view)
+        val circle_image=activity?.findViewById<ImageView>(R.id.small_circleImageView_profile_image)
         circle_image?.setOnClickListener {
             startActivity(Intent(activity,ProfileActivity::class.java))
         }

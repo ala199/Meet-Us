@@ -12,17 +12,18 @@
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
-
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/circle_image_view"
+            android:id="@+id/small_circleImageView_profile_image"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="@drawable/ic_baseline_account_circle_24"/>
+            android:src="@drawable/ic_account_circle"
+            tools:layout_editor_absoluteY="10dp"
+            tools:layout_editor_absoluteX="16dp"/>
 
         <TextView
             android:layout_width="wrap_content"
