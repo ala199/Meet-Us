@@ -11,7 +11,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.example.meetus.databinding.ActivityMainBinding
 import com.example.meetus.databinding.ActivityProfileBinding
+import com.example.meetus.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
@@ -19,12 +22,25 @@ import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
 
+    private val mAuth:FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
 
     private lateinit var binding: ActivityProfileBinding
 
     companion object{
-        val IMAGE_REQUEST_CODE=100
+        val IMAGE_REQUEST_CODE=2
     }
+
+    private lateinit var userName:String
+
+    private val firestoreInstance:FirebaseFirestore by lazy {
+        FirebaseFirestore.getInstance()
+    }
+
+    private val currentUserDocRef:DocumentReference
+        get() =firestoreInstance.document("users/${mAuth.currentUser?.uid.toString()}")
+
     //تكوين ال root الرئيسى فى storage
     private val storageInstance:FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -34,13 +50,19 @@ class ProfileActivity : AppCompatActivity() {
     private val currentUserStorageRef:StorageReference
     get()=storageInstance.reference.child(mAuth.currentUser?.uid.toString())
 
-    private val mAuth:FirebaseAuth by lazy {
-        FirebaseAuth.getInstance()
-    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.btnLogOut.setOnClickListener {
+            mAuth.signOut()
+            startActivity(Intent(this,SignInActivity::class.java))
+            finish()
+        }
 
         //حجز مكان للنص فى toolbar
         setSupportActionBar(binding.profileToolbar)
@@ -49,6 +71,11 @@ class ProfileActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        getUserInfo { user ->
+            userName=user.name
+
+        }
+
         //فتح معرض الصور, ثم اختيار صورة
         binding.bigCircleImageViewProfileImage.setOnClickListener {
              val myIntentImage=Intent().apply {
@@ -56,24 +83,21 @@ class ProfileActivity : AppCompatActivity() {
                  action=Intent.ACTION_GET_CONTENT
                  putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
              }
-            startActivityForResult(Intent.createChooser(myIntentImage, "Select Image"),
-                IMAGE_REQUEST_CODE)
-        }
-
-        binding.btnLogOut.setOnClickListener {
-            mAuth.signOut()
-            startActivity(Intent(this,SignInActivity::class.java))
-            finish()
+            startActivityForResult(Intent.createChooser(myIntentImage, "Select Image"), IMAGE_REQUEST_CODE)
         }
     }
+
+
+
+
 
     //اختيار صورة مؤقتا
     //هنا سوف نكتب الكود الذى يرفع الصورة الى storage لكى تحفظ فى firebase
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK &&
                 data != null && data.data != null ){
-            binding.bigCircleImageViewProfileImage.setImageURI(data?.data)
 
             //تقليص الصورة على شكل bytes ووضعها فى متغير حتى يمكن رفعها على ال firebase
             val selectedImagePath = data.data
@@ -82,20 +106,39 @@ class ProfileActivity : AppCompatActivity() {
             selectedImageBmp.compress(Bitmap.CompressFormat.JPEG, 20, outputStream)
             val selectedImageBytes=outputStream.toByteArray()
 
-            uploadProfileImage(selectedImageBytes)
+            binding.bigCircleImageViewProfileImage.setImageURI(data.data)//1 ?
+
+            uploadProfileImage(selectedImageBytes){path ->
+                val userFieldMap = mutableMapOf<String,Any>()
+                userFieldMap["name"]=userName
+                userFieldMap["profileImage"]=path
+                currentUserDocRef.update(userFieldMap)
+            }
+
+
         }
     }
 
-    private fun uploadProfileImage(selectedImageBytes:  ByteArray) {
+
+
+
+
+
+    private fun uploadProfileImage(selectedImageBytes:  ByteArray, onSuccess:(imagePath:String) -> Unit) {
+
         val ref=currentUserStorageRef.child("profilePicture/${UUID.nameUUIDFromBytes(selectedImageBytes)}")
         ref.putBytes(selectedImageBytes).addOnCompleteListener{
             if (it.isSuccessful){
-
+                //2 onSuccess
+                onSuccess(ref.path)
             }else{
-                Toast.makeText(this, "Error:${it.exception?.message.toString()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error:${it.exception?.message.toString()}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
+
+
 
 
     //الرجوع الى القائمة الرئيسية وهى home
@@ -107,5 +150,14 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+
+
+
+    private fun getUserInfo(onComplete:(User) -> Unit){
+        currentUserDocRef.get().addOnSuccessListener {
+            onComplete(it.toObject(User::class.java)!!)
+        }
     }
 }
